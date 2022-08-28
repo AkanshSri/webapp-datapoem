@@ -1,0 +1,28 @@
+<head>
+  <link href="https://fluentdesignforweb.github.io/v2/fluent-core.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+<div class="page_container">
+  <div class="pivot_container column large12 medium12 small12 primary_blue">
+      <a class="pivot_heading">{{username}}</a>
+
+      <a class="pivot_button right" onclick="window.open('/')">Log Out</a>
+      <a class="pivot_button right" onclick="history.back()">Profile</a>
+  </div>
+
+  <div class="column large12 medium12 small12">
+    {% block content %}
+      <br>
+      <br>
+      <br>
+      <br>
+      <head><link href="https://fluentdesignforweb.github.io/v2/fluent-core.css" rel="stylesheet" type="text/css" /></head>
+        <h1 class="ta_center">Weather</h1>
+        <iframe class="center"src="{{val}}" style="border:none;" height="120" scrolling="no" title="Iframe Example"></iframe>
+
+
+    {% endblock %}
+  </div>
+
+</div>

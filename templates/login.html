@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link href="https://fluentdesignforweb.github.io/v2/fluent-core.css" rel="stylesheet" type="text/css" />
+    </head>
+ 
+    <style>
+
+        body{
+            background: 
+                radial-gradient(circle at bottom left, #41ffef, transparent),
+                radial-gradient(circle at bottom right, #61e225, transparent),
+                radial-gradient(circle at top left, #ff4a4a, transparent),
+                radial-gradient(circle at top right, #b65cff, transparent)
+            ;
+        }
+
+        form{
+            background-color: #faccfa77;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 24px;
+        }
+    </style>
+
+<body>
+
+    <div class="page_container">
+
+        <form method="POST" action="/profile" class="column large4 medium6 small8 center dlevel3">
+            <div class="container">
+                <h2>Login</h2>
+                <br/><br/>
+                <label><b>Username</b></label><br/>
+                <input type="text" placeholder="Enter Username" name="uname" required><br/><br/>
+     
+                <label><b>Password</b></label><br/>
+                <input type="password" placeholder="Enter Password" name="psw" required><br/><br/><br/>
+     
+                <button class="primary_blue" type="submit">Login</button><br/>
+                <input type="checkbox" checked="checked"> Remember me<br/><br/>
+            </div>
+        </form>        
+    </div>
+
+ 
+ 
+</body>
+ 
+</html>

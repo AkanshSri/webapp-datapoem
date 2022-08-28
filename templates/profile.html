@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link href="https://fluentdesignforweb.github.io/v2/fluent-core.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body onload="checkCookie()">
+    <div class="page_container">
+
+        <div class="pivot_container column large12 medium12 small12 primary_blue">
+            <a class="pivot_heading">{{username}}</a>
+
+            <a class="pivot_button right" onclick="window.open('/')">Log Out</a>
+            <a class="pivot_button right" href="/products">Show Products</a>
+        </div>
+
+        <div class="column large5 medium5 small12">
+            <h4>Wallet</h4>
+            <p>Current Balance: <span id="curr_balance"></span></p>
+                <input type="number" id="addBal" /><br/><br/>
+                <button class="primary_blue" onclick="addBalance()">Add Balance</button>
+        </div>
+
+        <div class="column large5 medium5 small12">
+            <h4>Weather</h4>
+            <form method="POST" action="/weather">
+                <div class="form-group">
+                      <br/><input width="25" type="text" name="location"><br/><br/>
+                  <button class="primary_blue">Get Weather</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+
+    var wallet_balance = getCookie("balance")
+
+    function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+    }
+
+    function checkCookie() {
+    showCurrBal();
+
+    let check = getCookie("balance");
+    if (check != "") {
+        console.log("let's go")
+    } else {
+        let newBalance = 0 
+         {
+        setCookie("balance", newBalance, 365);
+        }
+    }
+    }
+
+    function showCurrBal(){
+        document.getElementById("curr_balance").innerHTML=wallet_balance;
+    }
+
+    function addBalance(){
+        let bal = wallet_balance;
+        let toAdd = document.getElementById("addBal").value;
+        console.log(Number(bal) + Number(toAdd));
+        let total = Number(bal) + Number(toAdd);
+        wallet_balance=total;
+        setCookie("balance", total, 365);
+        document.getElementById("curr_balance").innerHTML=wallet_balance;
+        document.getElementById("addBal").value="";
+    }
+</script>

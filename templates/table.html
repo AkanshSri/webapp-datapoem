@@ -1,0 +1,134 @@
+<head>
+    <link href="https://fluentdesignforweb.github.io/v2/fluent-core.css" rel="stylesheet" type="text/css" />
+    <script>
+        function openside1(){
+            document.getElementById("side1").style.display="Block";
+            document.getElementById("body").style.filter="saturate(250%) blur(25px)";
+        }
+        function closeside1(){
+            document.getElementById("side1").style.display="None";
+            document.getElementById("body").style.filter="blur(0px)";
+        }
+    </script>
+    <style>
+        .animateOnPress{
+            transition: 300ms;
+        }
+        .animateOnPress:focus{
+            background-color: #ff9900;
+            transition: 300ms;
+        }
+    </style>
+
+</head>
+
+<body onload="checkCookie();">
+
+    {%for prod in listprod%}
+        <tr id={{prod.serial_num}}>
+            <td class="border">{{prod.name}}</td>
+            <td class="border">{{prod.price}}</td>
+            <td class="border">{{prod.description}}</td>
+            <td class="border">{{prod.date_of_manufacture}}</td>
+            <td class="border">{{prod.stocks}}</td>
+            <td>
+                <button class="secondary_blue animateOnPress" onclick="addToCart('{{prod.name}}', '{{prod.price}}', '{{prod.serial_num}}')">Add</button>
+            </td>
+        </tr>         
+    {%endfor%}
+
+    <div class="sidepanel_container" id="side1">
+        <div class="sidepanel_content zi3 right">
+        <button class="primary_red right ta_center mod_close_btn" onclick="closeside1();">X</button>
+        <div class="page_container">
+                <h3>Cart Items</h3>
+                <ul id="cartItems" style="height: 60vh; overflow: auto;">
+                    <li id="newItem"></li>
+                </ul>
+                <h6><span id="total">Total : 0</span><h6>
+                <br/>
+                <button class="primary_blue" onclick="updateBalance()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="primary_blue dlevel1" onclick="openside1();" style="position: fixed; bottom: 20px; right: 30px;">Check Cart</button>
+
+</body>
+<script>
+    let cartItem=[]
+    let cartPrice=[]
+    let checkoutTotal=0
+
+    function addToCart(name, price, serial){
+        cartItem.push(name);
+        cartPrice.push(Number(price));
+        document.getElementById("newItem").innerText=name + " x Rs. " + price;
+        document.getElementById("newItem").id = name+price;
+        let cartTotal = cartPrice.reduce((a, b) => a + b, 0);
+        checkoutTotal = cartTotal;
+        document.getElementById("total").innerText="Total : Rs. " + cartTotal;
+        
+        let ul=document.getElementById("cartItems");
+        let li = document.createElement("li");
+        li.id="newItem";
+        ul.appendChild(li);
+        updateStock(serial);
+    }
+
+    async function updateStock(serialNum){
+        let url= "/updateStock/"+serialNum;
+        console.log(url);
+        let req = await fetch(url);
+    }
+
+    function updateBalance(){
+        let curr_bal = getCookie("balance");
+        curr_bal = Number(curr_bal);
+        if(checkoutTotal>curr_bal){
+            alert("can't proceed balance low");
+        }else{
+            let new_bal = curr_bal-checkoutTotal
+            console.log(new_bal)
+            setCookie("balance", new_bal, 365)
+            alert("transaction successful");
+        }
+        location.reload();
+    }
+
+    function checkCookie() {
+
+        let check = getCookie("balance");
+        if (check != "") {
+            console.log("let's go")
+        } else {
+            let newBalance = 0 
+            {
+            setCookie("balance", newBalance, 365);
+            }
+        }
+
+    }    
+    
+    function getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+</script>
